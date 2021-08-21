@@ -1,12 +1,9 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home Page</title>
-</head>
-<body>
+{% extends "base_template.html" %}
+
+{% block title %}Home Page{% endblock %}
+
+{% block content %}
+
     <!-- Using Jinja2 templating engine -->
 
 
@@ -14,8 +11,8 @@
 
 
     {%  for i in var  %}
-        {%  if i=="their"  %}
-            <p>there</p>
+        {%  if i=="Their"  %}
+            <p>There</p>
         {%  else  %}
         <p>{{ i }}</p>
         {%  endif  %}
@@ -23,12 +20,12 @@
 
     <h3>
         {%  for i in var  %}
-            {%  if i=="their"  %}
-                there!
+            {%  if i=="Their"  %}
+                There!
             {%  else  %}
                 {{ i }}
             {%  endif  %}
         {%  endfor  %}
     </h3>
-</body>
-</html>
+
+{% endblock %}
