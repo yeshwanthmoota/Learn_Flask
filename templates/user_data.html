@@ -2,7 +2,8 @@
 {% block title %}{% endblock %}
 {% block content %}
     <h2>Hi! {{ user_name }}, you are logged in!</h2>
-     <form action="logout" method="get">   <!-- this gets directed to the /logout page due to action="logout" -->
-        <input type="submit" value="Logout">
+    <form action="logout" method="get" id = "form1">   <!-- this gets directed to the /logout page due to action="logout" -->
+        <button class="btn btn-primary" type="submit">Logout</button>
     </form>
+    <!-- <button class="btn btn-success" type="submit" form="form1">Logout</button> -->
 {% endblock %}
