@@ -1,4 +1,4 @@
-from flask import Flask, redirect, url_for, render_template, request, session
+from flask import Flask, redirect, url_for, render_template, request, session, flash
 from datetime import timedelta
 
 
@@ -27,11 +27,17 @@ def home(): # defining pages on the website
 def login():
     if request.method == "POST":
         session.permanent = True
-        usr_name = request.form["nm"]
-        session["user's name"] = usr_name
-        return redirect(url_for("user"))
+        if request.form["nm"] == "":
+            flash("Name field not filled", category = "danger")
+            return redirect(url_for("login"))
+        else:
+            usr_name = request.form["nm"]
+            session["user's name"] = usr_name
+            flash("Logged In Successfully!", category = "success")
+            return redirect(url_for("user"))
     else:
         if "user's name" in session:
+            flash("User already Logged In", category = "warning")
             return redirect(url_for("user"))
         else:
             return render_template("login.html")
@@ -51,8 +57,13 @@ def user():
 
 @app.route("/logout") # Creating routes for the webpages
 def logout():
-    session.pop("user's name", None)
-    return redirect(url_for("login"))
+    if "user's name" in session:
+        session.pop("user's name", None)
+        flash("You have been logged Out!", category="success")
+        return redirect(url_for("login"))
+    else:
+        flash("No User Logged In", category = "info")
+        return redirect(url_for("home"))
 
 
 
