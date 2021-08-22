@@ -4,28 +4,6 @@
 
 {% block content %}
 
-    <!-- Using Jinja2 templating engine -->
-
-
-    <h1>{{ greet }}</h1>
-
-
-    {%  for i in var  %}
-        {%  if i=="Their"  %}
-            <p>There</p>
-        {%  else  %}
-        <p>{{ i }}</p>
-        {%  endif  %}
-    {%  endfor  %}
-
-    <h3>
-        {%  for i in var  %}
-            {%  if i=="Their"  %}
-                There!
-            {%  else  %}
-                {{ i }}
-            {%  endif  %}
-        {%  endfor  %}
-    </h3>
+    <h1>Hello There! , This is a flask-based Website</h1>
 
 {% endblock %}
