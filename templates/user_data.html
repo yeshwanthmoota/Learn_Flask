@@ -1,0 +1,8 @@
+{% extends "base_template.html" %}
+{% block title %}{% endblock %}
+{% block content %}
+    <h2>Hi! {{ user_name }}, you are logged in!</h2>
+     <form action="logout" method="get">   <!-- this gets directed to the /logout page due to action="logout" -->
+        <input type="submit" value="Logout">
+    </form>
+{% endblock %}
