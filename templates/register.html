@@ -7,21 +7,19 @@
     <br>
 
     <form action="#" method="post">
-        <div>
-            Name: <input type="text" name="nm" placeholder="Enter Your Name">
+        <div class="mb-3">
+          <label for="NAME" class="form-label">Name</label>
+          <input type="text" class="form-control" id="NAME" name="nm" placeholder="Enter Your Name">
         </div>
-        <br>
-        <div>
-            Email: <input type="text" name="eml" placeholder="Enter Your Email">
+        <div class="mb-3">
+          <label for="EMAIL" class="form-label">Email Address</label>
+          <input type="email" class="form-control" id="EMAIL" aria-describedby="emailHelp" name="eml" placeholder="Enter Your Email">
+          <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
         </div>
-        <br>
-        <div>
-            <button class="btn btn-outline-primary" type="submit">Register</button>
-        </div>
-        <br>
+        <button type="submit" class="btn btn-outline-primary">Register</button>
         <div>
             Already have an account? <a href="/login" class="link-primary" >Sign in</a>
         </div>
-</form>
+    </form>
 
 {% endblock %}
