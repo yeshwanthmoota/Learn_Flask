@@ -1,0 +1,15 @@
+{% extends "base_template.html" %}
+
+{% block title %}{% endblock %}
+
+{% block content %}
+    {% if all_users == None %}
+        <h3>No registered Users!</h3>
+    {% else %}
+        {% for user in all_users %}
+            <br>
+            <strong>Name: {{ user.name }}, Email: {{ user.email }}</strong>
+        {% endfor %}
+    {% endif %}
+   
+{% endblock %}
