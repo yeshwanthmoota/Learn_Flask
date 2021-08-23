@@ -2,7 +2,16 @@
 {% block title %}{% endblock %}
 {% block content %}
     <h2>Hi! {{ user_name }}, you are logged in!</h2>
-    <form action="logout" method="get" id = "form1">   <!-- this gets directed to the /logout page due to action="logout" -->
+    <h2>{{ user_email }}, This is your Email</h2>
+    <br>
+    <form action="user" method="post">
+        <div>
+            <input type="email" placeholder="Enter your email address" value={{ user_email }} name="eml">
+            <button class="btn btn-primary" type="submit">Change Email</button>
+        </div>
+    </form>
+    <br>
+    <form action="logout" method="get">   <!-- this gets directed to the /logout page due to action="logout" -->
         <button class="btn btn-primary" type="submit">Logout</button>
     </form>
     <!-- <button class="btn btn-success" type="submit" form="form1">Logout</button> -->

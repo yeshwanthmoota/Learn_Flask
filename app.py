@@ -3,13 +3,15 @@ from datetime import timedelta
 
 
 
+
 app = Flask(__name__)
 app.secret_key = "hello_world"
 # app.secret_key = "6b8aff760b701265494ae0d98a5058fa" # a more secure key should be something like this
 # The above key is generated using secrets module, see the program below
 # import secrets
-# secrets.token_hex(16) # it generates a random 16 bit string everytime.
+# print(secrets.token_hex(16)) # it generates a random 16 bit string everytime.
 app.permanent_session_lifetime = timedelta(minutes = 1)
+
 
 
 
@@ -27,12 +29,14 @@ def home(): # defining pages on the website
 def login():
     if request.method == "POST":
         session.permanent = True
-        if request.form["nm"] == "":
-            flash("Name field not filled", category = "danger")
+        if request.form["nm"] == "" or request.form["eml"] == "":
+            flash("required fields not filled", category = "danger")
             return redirect(url_for("login"))
         else:
             usr_name = request.form["nm"]
             session["user's name"] = usr_name
+            usr_email = request.form["eml"]
+            session["user's email"] = usr_email
             flash("Logged In Successfully!", category = "success")
             return redirect(url_for("user"))
     else:
@@ -44,13 +48,26 @@ def login():
 
 
 
-@app.route("/user") # Creating routes for the webpages
+@app.route("/user", methods = ["POST", "GET"]) # Creating routes for the webpages
 def user():
-    if "user's name" in session:
-        usr = session["user's name"]
-        return render_template("user_data.html", user_name = usr)
-    else:
-        return redirect(url_for("login"))
+    if request.method == "GET":
+        if "user's name" in session:
+            usr_name = session["user's name"]
+            usr_email = session["user's email"]
+            return render_template("user_data.html", user_name = usr_name, user_email = usr_email)
+        else:
+            return redirect(url_for("login"))
+    elif request.method == "POST":
+        if request.form["eml"] == "":
+            flash("required fields not filled", category = "danger")
+        else:
+            if session["user's email"] == request.form["eml"]:
+                flash("The same email has been entered", category="warning")
+            usr_email = request.form["eml"]
+            session["user's email"] = usr_email
+            flash("user's email chaged Successfully!", category = "success")
+        return redirect(url_for("user"))
+        
 
 
 
@@ -59,7 +76,7 @@ def user():
 def logout():
     if "user's name" in session:
         session.pop("user's name", None)
-        flash("You have been logged Out!", category="success")
+        flash("You have been Logged Out Successfully!", category="success")
         return redirect(url_for("login"))
     else:
         flash("No User Logged In", category = "info")
