@@ -6,8 +6,7 @@ import logging
 
 
 app = Flask(__name__)
-app.secret_key = "hello_world"
-# app.secret_key = "6b8aff760b701265494ae0d98a5058fa" # a more secure key should be something like this
+app.secret_key = "6b8aff760b701265494ae0d98a5058fa"
 # The above key is generated using secrets module, see the program below
 # import secrets
 # print(secrets.token_hex(16)) # it generates a random 16 bit string everytime.
@@ -19,7 +18,7 @@ app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 db = SQLAlchemy(app)
 
 
-class All_Users(db.Model):
+class Users(db.Model):
     id = db.Column(db.Integer, unique=True, primary_key=True)
     name = db.Column(db.String(80), unique=False, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
@@ -47,7 +46,7 @@ def register():
     if request.method == "POST":
 
         if request.form["nm"] == "" or request.form["eml"] == "" or request.form["passw"] == "":
-            flash("required fields not filled", category = "danger")
+            flash("required fields are not filled", category = "danger")
             return redirect(url_for("register"))
         else:
             usr_name = request.form["nm"]
@@ -55,13 +54,13 @@ def register():
             usr_password = request.form["passw"]
             usr_confirm_password = request.form["passw_confr"]
             if usr_password == usr_confirm_password:
-                found_user = All_Users.query.filter_by(email=usr_email).first()
+                found_user = Users.query.filter_by(email=usr_email).first()
                 if found_user:
                     flash("User with this email address already exists, Please Log in!", category="info")
                     return redirect(url_for("login"))
                 else:
                     # registering a new user
-                    new_user = All_Users(usr_name, usr_email, usr_password)
+                    new_user = Users(usr_name, usr_email, usr_password)
                     db.session.add(new_user)
                     db.session.commit()
                     flash("You have been Successfully Registered!", category="success")
@@ -81,20 +80,19 @@ def login():
     if request.method == "POST":
         session.permanent = True
         if request.form["eml"] == "" or request.form["passw"] == "":
-            flash("required fields not filled", category = "danger")
+            flash("required fields are not filled", category = "danger")
             return redirect(url_for("login"))
         else:
             usr_email = request.form["eml"]
             usr_password = request.form["passw"]
-            found_user = All_Users.query.filter_by(email = usr_email, password = usr_password).first()
+            found_user = Users.query.filter_by(email = usr_email, password = usr_password).first()
             if found_user:
                 session["user's name"] = found_user.name
                 session["user's email"] = usr_email
-                session["user's password"] = usr_password
                 flash("Logged In Successfully!", category = "success")
                 return redirect(url_for("user"))
             else: # User not found
-                found_user_2 = All_Users.query.filter_by(email= usr_email).first()
+                found_user_2 = Users.query.filter_by(email= usr_email).first()
                 if found_user_2:
                     flash("Entered The Wrong Password!, Please try again", category = "danger")
                     return redirect(url_for("login"))
@@ -114,8 +112,8 @@ def login():
 @app.route("/view_all_users")
 def view_all_users():
     logging.basicConfig(filename='log_file_view_all_users.log', encoding='utf-8', level=logging.DEBUG)
-    logging.info(All_Users.query.all())
-    return render_template("view_all_users.html", all_users = All_Users.query.all())
+    logging.info(Users.query.all())
+    return render_template("view_all_users.html", all_users = Users.query.all())
 
 
 
@@ -129,22 +127,27 @@ def user():
         else:
             return redirect(url_for("login"))
     elif request.method == "POST":
-        if request.form["eml"] == "":
-            flash("required fields not filled", category = "danger")
-        else:
-            if session["user's email"] == request.form["eml"]:
-                flash("The same email has been entered", category="warning")
+        if "user's name" in session: # check if session is still running
+            if request.form["passw"] == "" or request.form["new_passw"] == "" or request.form["confr_passw"] == "": # check if any of the boxes are empty
+                flash("required fields are not filled", category = "danger")
+                return redirect(url_for("change_password"))
             else:
-                found_email = All_Users.query.filter_by(email = request.form["eml"]).first()
-                if found_email:
-                    flash("The Entered email address already exists please try again!", category="danger")
+                found_user = Users.query.filter_by(email = session["user's email"]).first()
+                if request.form["passw"] == found_user.password: # check if the user entered the correct current password
+                    if request.form["new_passw"] != request.form["confr_passw"]: # check if both the new passwords don't match
+                        flash("The New Passwords don't match, Please try again", category="danger")
+                        return redirect(url_for("change_password"))
+                    else: # sucessful change
+                        found_user.password = request.form["new_passw"]
+                        db.session.commit()
+                        flash("Password changed successfully", category="success")
+                        return redirect(url_for("user"))
                 else:
-                    found_user = All_Users.query.filter_by(email=session["user's email"]).first()
-                    found_user.email = request.form["eml"]
-                    db.session.commit()
-                    session["user's email"] = request.form["eml"]
-                    flash("user's email chaged Successfully!", category = "success")
-            return redirect(url_for("user"))
+                    flash("Entered The Wrong Password, Please Try again", category="danger")
+                    return redirect(url_for("change_password"))
+        else:
+            flash("You got Logged out, Please Log in again", category="warning")
+            return redirect(url_for("login"))
         
 
 
@@ -164,13 +167,18 @@ def logout():
 
 @app.route("/delete_account")
 def delete_account():
-    All_Users.query.filter_by(email = session["user's email"]).delete()
+    Users.query.filter_by(email = session["user's email"]).delete()
     db.session.commit()
     session.pop("user's name", None)
     session.pop("user's email", None)
     session.pop("user's password", None)
     flash("Account deleted successfully!", category = "success")
     return redirect(url_for("login"))
+
+
+@app.route("/change_password", methods=["GET"])
+def change_password():
+    return render_template("change_password.html")
 
 
 if __name__ == '__main__':

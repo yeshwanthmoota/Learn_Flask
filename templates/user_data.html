@@ -4,16 +4,12 @@
     <h2>Hi! {{ usr_name }}, you are logged in!</h2>
     <h2>{{ usr_email }}, This is your Email</h2>
     <br>
-    <form action="user" method="post">
-        <div class="mb-3">
-          <label for="EMAIL" class="form-label">Enter the New Email address</label>
-          <input type="email" class="form-control" id="EMAIL" type="email" placeholder="Enter your email address" value={{ usr_email }} name="eml">
-        </div>
-        <button type="submit" class="btn btn-outline-success">Change Email</button>
+    <form action="change_password" method="get">
+        <button class="btn btn-outline-primary" type="submit" >Change Password</button>
     </form>
     <br>
     <form action="logout" method="get" >   <!-- this gets directed to the /logout page due to action="logout" --> 
-        <button class="btn btn-outline-primary" type="submit" >Logout</button>    
+        <button class="btn btn-outline-success" type="submit" >Logout</button>    
     </form>
     <br>
     <form action="delete_account" method="get" >
