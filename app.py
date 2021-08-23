@@ -20,7 +20,7 @@ db = SQLAlchemy(app)
 
 
 class All_Users(db.Model):
-    id = db.Column(db.Integer, unique=False, primary_key=True)
+    id = db.Column(db.Integer, unique=True, primary_key=True)
     name = db.Column(db.String(80), unique=False, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
     password = db.Column(db.String(120), unique=False, nullable=False)
