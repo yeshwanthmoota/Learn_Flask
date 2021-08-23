@@ -7,16 +7,16 @@
     <form action="user" method="post">
         <div>
             <input type="email" placeholder="Enter your email address" value={{ user_email }} name="eml">
-            <button class="btn btn-primary" type="submit">Change Email</button>
+            <button class="btn btn-outline-success" type="submit">Change Email</button>
         </div>
     </form>
     <br>
     <form action="logout" method="get" >   <!-- this gets directed to the /logout page due to action="logout" --> 
-        <button class="btn btn-primary" type="submit" >Logout</button>    
+        <button class="btn btn-outline-primary" type="submit" >Logout</button>    
     </form>
     <br>
     <form action="delete_account" method="get" >
-        <button class="btn btn-danger" type="submit" >Delete Account</button>
+        <button class="btn btn-outline-danger" type="submit" >Delete Account</button>
     </form>
     <!-- <button class="btn btn-success" type="submit" form="form1">Logout</button> -->
 {% endblock %}
