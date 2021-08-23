@@ -1,7 +1,7 @@
 from flask import Flask, redirect, url_for, render_template, request, session, flash
 from datetime import timedelta
 from flask_sqlalchemy import SQLAlchemy
-
+import logging
 
 
 
@@ -107,7 +107,8 @@ def login():
 
 @app.route("/view_all_users")
 def view_all_users():
-    print(Users.query.all())
+    logging.basicConfig(filename='log_file_view_all_users.log', encoding='utf-8', level=logging.DEBUG)
+    logging.info(Users.query.all())
     return render_template("view_all_users.html", all_users = Users.query.all())
 
 
