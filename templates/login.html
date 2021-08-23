@@ -7,15 +7,19 @@
     <br>
     <form action="#" method="post">
         <div class="mb-3">
-          <label for="NAME" class="form-label">Name</label>
-          <input type="text" class="form-control" id="NAME" name="nm">
-        </div>
+            <label for="EMAIL" class="form-label">Email Address</label>
+            <input type="email" class="form-control" id="EMAIL" aria-describedby="emailHelp" name="eml" value = {{ usr_email }}>
+            <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+          </div>
         <div class="mb-3">
-          <label for="EMAIL" class="form-label">Email Address</label>
-          <input type="email" class="form-control" id="EMAIL" aria-describedby="emailHelp" name="eml">
-          <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+          <label for="PASSWORD" class="form-label">Password</label>
+          <input type="password" class="form-control" id="PASSWORD" name="passw">
         </div>
         <button type="submit" class="btn btn-outline-primary">Submit</button>
+        <div>
+            <br>
+            New here?   <a href="/register" class="link-primary" >Sign up!</a> Now
+        </div>
       </form>
 
 {% endblock %}
