@@ -67,7 +67,7 @@ def register():
                     return redirect(url_for("login"))
             else:
                 flash("Both the passwords don't match, Please try again", category = "danger")
-                return render_template("register", usr_name = usr_name, usr_email = usr_email)
+                return render_template("register.html", usr_name = usr_name, usr_email = usr_email)
     
     else: # "GET" request
         return render_template("register.html")
@@ -95,7 +95,7 @@ def login():
                 found_user_2 = Users.query.filter_by(email= usr_email).first()
                 if found_user_2:
                     flash("Entered The Wrong Password!, Please try again", category = "danger")
-                    return redirect(url_for("login"))
+                    return render_template("login.html", usr_email = usr_email)
                 else:
                     flash("User with this email has not yet registered, Register Now!", category="warning")
                     return redirect(url_for("register"))
